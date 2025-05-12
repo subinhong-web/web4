@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진행상태 바</title>
+
+    <style>
+
+        body {
+            height: 5000px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .scroll_bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 10px;
+            background: rgb(129, 247, 129);
+        }
+
+    </style>
+
+</head>
+<body>
+    
+    <div class="scroll_bar"></div>
+
+    <script>
+        // 스크롤 이벤트가 발생시킴
+        // scroll_bar를 가져옴
+        // 얼마나 스크롤 했는지를 변수에 담아줌. ( 스크롤을 할수록 값이 커지는 기능을 사용! )
+
+        // 스크롤을 할 수 있는 총 길이를 계산
+
+        window.addEventListener("scroll", () => {
+            const scrollBar = document.querySelector(".scroll_bar");
+            // 하나만 가져올때는 querySelector를 사용하는 것이 좋음. (.을 붙여 클래스 이름을 작성한다.)
+            const scrollY = window.scrollY;
+            // scrollY 스크롤 길이를 알 수 있음 제발좀 까먹지 마라
+            const scrollHeight = document.body.scrollHeight - window.innerHeight;
+
+            const scrollPercent = (scrollY / scrollHeight) *100;
+            // 스크롤을 할 수 있는 총 길이
+            scrollBar.style.width = `${scrollPercent}%`;
+        });
+    </script>
+</body>
+</html>
