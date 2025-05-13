@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모달 창</title>
+    <style>
+        /* display: none; 이라는 속성으로 보이지 않게 만듬. */
+        .open_modal {
+            background: palegreen;
+            border: none;
+            border-radius: 24px;
+            width: 250px;
+            height: 50px;
+            font-size: 24px;
+            color: rgb(52, 51, 53);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+        }
+
+        .modal {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            background-color: #fff;
+            text-align: center;
+            border: 1px solid #72ec8c;
+            border-radius: 15px;
+            padding: 24px;
+        }
+
+        .close_modal {
+            width: 150px;
+            height: 50px;
+            font-size: 16px;
+            border: none;
+            border-radius: 24px;
+            background-color: rgb(137, 255, 182);
+        }
+
+    </style>
+</head>
+
+<body>
+    <button class="open_modal" id="open_modal">
+        모달 열기
+    </button>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="modal" id="modal">
+        <h2>모달창이 오픈되었다!</h2>
+
+        <button class="close_modal" id="close_modal">
+            모달창 닫기!
+        </button>
+    </div>
+
+    <script>
+        const openModal = document.getElementById("open_modal");
+        const overlay = document.getElementById("overlay");
+        const modal = document.getElementById("modal");
+        const close_modal = document.getElementById("close_modal");
+
+        // openModal 클릭 시 overlay와 modal의 스타일을 block으로 바꿔보자!
+        openModal.addEventListener('click', function() {
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        // 중복되는 코드는 함수로 만들어서 호출시키기!
+        function closeModalFunction() {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        }
+
+        close_modal.addEventListener('click', function() {
+            closeModalFunction()
+        });
+
+        overlay.addEventListener('click', function() {
+            closeModalFunction()
+        });
+
+        window.addEventListener('keydown', function() {
+            if(event.key === 'Escape') {
+                closeModalFunction()
+            }
+            // ESC키를 눌렀을 때
+        });
+    </script>
+</body>
+</html>
