@@ -64,7 +64,7 @@
         }
 
         .active {
-            background-color: #67fa93;
+            background-color: #3d9256;
         }
 
     </style>
@@ -102,10 +102,11 @@
     </div>
 
     <script>
+
         const buttons = document.querySelector(".slide_btns"); // 닷을 포함한 전체 버튼 박스
         const viewBox = document.querySelector('.slide_container'); // 보여지는 부분
         const slide = document.querySelector('.slide'); // ul
-        const dotBox = document.querySelector('.dot_bos'); // dot이 들어갈 빈 div
+        const dotBox = document.querySelector('.dot_box'); // dot이 들어갈 빈 div
         const sliderWidth = 1000; // 슬라이드 한 장의 너비
         let moveCheck = true; // 이동중임을 체크하는 변수
 
@@ -136,12 +137,96 @@
 
         // --------------------------------------------------------------
 
+        buttons.children[0].addEventListener('click',prev);
+        buttons.children[2].addEventListener('click',next);
+
+        // --------------------------------------------------------------
+
+        function moveslide(time) {
+            slide.style.transition = time + 'ms'; // 1000 => 1000ms => 1초
+            slide.style.transform = `translateX(-${index * sliderWidth}px)`;
+            updateDot();
+        };
+
+        // --------------------------------------------------------------
+
         function prev() {
             if(moveCheck) {
-                moveCheck = false; // prev함수를 실행 중 다시 prev가 실행되지 않도록 잠시 false로 변경.
+                moveCheck = false; 
+                // prev함수를 실행 중 다시 prev가 실행되지 않도록 잠시 false로 변경.
                 index--;
+                setTimeout(()=> {
+                    if(index === 0) {
+                        index = slide.childElementCount-2;
+                        moveslide(0);
+                    }
+                    moveCheck = true;
+                    // 왼쪽으로 가는 무빙이 끝난 후 다시 prev 버튼을 누를 수 있도록 true로 변경해줌.
+                },1000);
+                // 1초동안 movecheck flase를 시킴.
+                moveslide(1000);
             }
+        };
+
+        function next() {
+            if(moveCheck) {
+                moveCheck = false; 
+                // 연속으로 눌러 에러가 나는 상황을 방지하기 위해 flase로 막음.
+                index++;
+                setTimeout(()=> {
+                    if(index === slide.childElementCount-1) {
+                        // 인덱스가 6이 되었다면
+                        index = 1;
+                        moveslide(0);
+                    }
+                    moveCheck = true;
+                },1000);
+                moveslide(1000);
+            }
+        };
+
+        // --------------------------------------------------------------
+
+        console.log(sliderLength);
+        for(let i = 0; i < sliderLength-2; i++) {
+            const makeDiv = document.createElement('div');
+            makeDiv.classList.add("dot");
+            dotBox.appendChild(makeDiv);
+            // appendChild : 부모요소에 자식요소를 맨 마지막에 추가.
+
+            makeDiv.addEventListener('click',()=> {
+                index = i + 1;
+                moveslide(1000);
+            });
+        };
+
+        // --------------------------------------------------------------
+        // 브라우저를 겼을 때 1번 li가 먼저 보이니까 제일 처음 dot에 active가 붙어있어야함.
+        dotBox.children[0].classList.add('active');
+        // 버튼을 누르면 닷버튼이 옆으로 이동을 해야함.
+        function updateDot() {
+            for(let i = 0; i < sliderLength -2; i++) {
+                dotBox.children[i].classList.remove('active');
+                if(index === 0) {
+                    dotBox.children[sliderLength-3].classList.add('active');
+                    // sliderLength -3 : 4
+                    // dotBox : 5의 닷이 존재함 각각 0,1,2,3,4,5 라는 index를 가지고 있음.
+                    // 마지막 5번째의 index번호는 4이기 때문에 4번에 active를 붙이는것.
+                } else if(index === sliderLength -1) {
+                    dotBox.children[0].classList.add('active');
+                    // 마지막 복제한 슬라이드인 1번이 보이고 있다면 
+                    // dot은 제일 처음에 붙어야 하므로 0에 active 붙여줌.
+                } else {
+                    dotBox.children[index-1].classList.add('acitve');
+                }
+            };
         }
+
+        // --------------------------------------------------------------
+        // 5초에 한번씩 움직이는 슬라이드
+        setInterval(()=> {
+            next();
+        },5000);
 
     </script>
 
