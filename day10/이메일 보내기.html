@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이메일 보내기</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <!-- email.js 랑 연동이 되었음! -->
+    <!-- emailjs를 사용하기 위해서 타이틀 아래에 스크립트로 emailjs cdn을 넣어주어야함. -->
+    <!-- emailjs cdn 버전이 다 다르기 때문에 gpt에 물어보면 알려줌. -->
+    <style>
+
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #bababa;
+        }
+
+        form {
+            width: 400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 2px 4px 30px rgba(66, 66, 66, 0.5);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    
+    <form id="contact-form">
+        <!-- form : 백엔드 서버와 소통할때 많이 사용. HTML에서는 로그인창으로 주로 사용한다. -->
+        <h2>
+            문의하기
+        </h2>
+        <!-- 받는 사람, 보내는 사람, 메일 제목, 시간, 내용, 제출 버튼 -->
+         <!-- required : 유효성 검사. -->
+        <input type="text" name="to-name" placeholder="받는 사람" required>
+        <input type="text" name="from-name" placeholder="보내는 사람" required>
+        <input type="text" name="title" placeholder="메일 제목" required>
+        <input type="text" name="time" placeholder="현재 시간 입력" required>
+        <textarea name="massage" placeholder="내용 입력" rows="5" required></textarea>
+        <input type="submit">
+        <!-- 이메일 js는 input타입 submit을 지원함. -->
+    </form>
+
+    <script>
+
+        // emailjs > Docs ( 사용방법이 나와있음. ) > Create a contact form > 
+        // emailjs.init({
+        // publicKey: 'YOUR_PUBLIC_KEY',
+        // });
+        // emailjs.sendForm('contact_service', 'contact_form', this);
+        // contact_service는 처음에 만들어진것
+        // contact_form : Email Templates에 들어가면 있음.
+
+        emailjs.init("ZmNqXkD0bJSfcFnMG"); // 퍼블릭키입력. (이메일js 본인 이름 클릭 시 나옴.)
+
+        document.getElementById("contact-form").addEventListener("submit", function(e) {
+            e.preventDefault(); 
+            // 연동이 되기 전에 전송되는것을 방지. ( 폼 기본 제출을 방지. )
+            emailjs.sendForm('service_4321v2k', 'template_gel36lt', this)
+            .then(function() {
+                alert("메일이 전송되었습니다.");
+                document.getElementById("contact-form").reset();
+            }, function(error) {
+                alert("메일 전송 실패 : " + error.text);
+            });
+        });
+
+    </script>
+</body>
+</html>
